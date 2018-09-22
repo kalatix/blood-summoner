@@ -871,6 +871,7 @@ let actLibrary = [
       if (currentRoom.exitAllowed) {
         log("Leaving the area...", "yellow");
         switchMap('map');
+        bgmStop();
         //show the tutorial for a bit
         if (mapTutorial) {
           $('.map-tutorial').addClass('active');

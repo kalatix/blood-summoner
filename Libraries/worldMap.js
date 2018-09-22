@@ -10,6 +10,21 @@ let mapBattleStepsMax = 15;
 let mapBattling = false;
 let stepsSinceLastBattle = 0;
 
+let gitHub = 'https://raw.githubusercontent.com/kalatix/blood-summoner/master/Music/';
+let bgmLibrary = [];
+
+const bgmWhiteCrag = new Howl({
+  src: [ gitHub + 'White-Crag-Theme-v2.mp3' ],
+  loop: 95.5, // when the loop should start (in seconds)
+  onload: function() {
+    bgmPush(this);
+    //this.seek(345);
+  },
+  onend: function() {
+    bgmLoop(this);
+  }
+});
+
 let bastions = [
   {
     entry: 'bastion1',
@@ -112,7 +127,8 @@ let terr1POIs = [
     accessible: true,
     forcedEntry: false,
     entrance: 1018,
-    coords: {x:-22, y:-41}
+    coords: {x:-22, y:-41},
+    bgm: bgmWhiteCrag
   },
   {
     entry: 'graff',

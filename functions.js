@@ -823,6 +823,10 @@ function enterPOI(destination) {
       log("You enter " + poi.title, 'yellow');
       look();
       switchMap('room');
+      if (poi.bgm) {
+        //logProps(poi.bgm);
+        bgmPlay(poi.bgm);
+      }
     }
   } else if (destination) {
   } else {
@@ -3335,25 +3339,34 @@ $('.console-form').submit(function (e) {
   }
 });
 
-//var bgmWhiteCrag = $buzz('https://drive.google.com/open?id=1_wIJB8-OVMIULtlMcMJm4-Un1oTg3-dR');
+function bgmPush(howl) {
+  bgmLibrary.push(howl);
+}
 
-const gitHub = 'https://raw.githubusercontent.com/kalatix/blood-summoner/master/Assets/'
+function bgmStop() {
+  $.each(bgmLibrary, function() {
+    var $this = this;
+    $this.fade(1, 0, 1500);
+    setTimeout(function() {
+      $this.stop();
+      $this.volume(1);
+    }, 1750);
+  });
+}
 
-const bgmWhiteCrag = new Howl({
-  src: [ gitHub + 'White-Crag-Theme-v1-compressed.m4a' ],
-  loop: true,
-  volume: 1,
-  autoplay: false,
-  loopPos: 95000 //# of milliseconds into the file when the loop should start
-  onload: function() {
-    bgmWhiteCrag.seek(bgmWhiteCrag.loopPos).play();
+function bgmPlay(howl) {
+  if (howl) {
+    howl.volume(1);
+    howl.play();
+    //document.removeEventListener("mousemove", playMusic);
+    console.log("Playing music");
   }
-});
+}
 
-function playMusic() {
-  bgmWhiteCrag.play();
-  //document.removeEventListener("mousemove", playMusic);
-  console.log("Playing music");
+function bgmLoop(howl) {
+    howl.volume(0);
+    howl.seek(howl._loop);
+    howl.fade(0,1,500);
 }
 
 
@@ -3378,7 +3391,7 @@ function showTitle() {
 
   $('.log.input, .bars.hp').addClass('hidden');
   $('.title-wrapper').removeClass('hidden');
-  playMusic();
+  bgmPlay(bgmWhiteCrag);
   if (recentSave) {
     $('.sub-line.load').removeClass('hidden');
   } else {

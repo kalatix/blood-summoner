@@ -513,7 +513,7 @@ let objLibrary = [
     defaultQty: 1
   },
   {
-    entry: ['dagger', 'rusty'],
+    entry: ['dagger', 'rusty', 'dagg', 'dag'],
     title: 'rusty dagger',
     shortTitle: 'rusty dagger',
     article: 'a ',
@@ -522,7 +522,7 @@ let objLibrary = [
     roomDesc: "A rusted <w>dagger</w> lies on the ground.",
     inspectDesc: 'An unreliable blade with modest damage. Better than your fists.',
     summonDesc: "You ready the dagger.",
-    equipDesc: "You practice with the rusted blade. Unequip with (<o>uneq</o>).",
+    equipDesc: "You practice with the rusted blade. Unequip with <o>uneq</o>.",
     unsummonDesc: 'You put the dagger away.',
     type: ['equip'],
     class: ['light blade'],

@@ -242,7 +242,7 @@ let roomLibrary = [
     current: false,
     POI: 'crags',
     func: function() {
-      log("The red bars to the left show your current health. You are badly hurt. Type <o>use potion</o> to restore your health.");
+      log("The red bars to the left show your current health. <y>You are badly hurt</y>. Type <o>use potion</o> to restore your health.");
     }
   },
   {
@@ -334,7 +334,7 @@ let roomLibrary = [
   {
     title: 'north trimble',
     ID: 1014,
-    desc: "An aged tree clings for life at the edge of the pathway.",
+    desc: "An aged tree clings for life at the edge of the cliff.",
     descPreview: "a clearing.",
     cont: [401], //dagger
     mobs: [

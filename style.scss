@@ -213,6 +213,11 @@ pu {
 	&.battling .input.log {
     border-color: $red;
 	}
+
+	&:not(.active) {
+		max-height: 0;
+		overflow: hidden;
+	}
 }
 
 .map-wrapper {
