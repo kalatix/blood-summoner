@@ -242,7 +242,7 @@ let roomLibrary = [
     current: false,
     POI: 'crags',
     func: function() {
-      log("If you get severely injured, type <o>use potion</o> to restore your health.");
+      log("The red bars to the left show your current health. You are badly hurt. Type <o>use potion</o> to restore your health.");
     }
   },
   {

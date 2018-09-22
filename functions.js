@@ -3337,13 +3337,17 @@ $('.console-form').submit(function (e) {
 
 //var bgmWhiteCrag = $buzz('https://drive.google.com/open?id=1_wIJB8-OVMIULtlMcMJm4-Un1oTg3-dR');
 
+const gitHub = 'https://raw.githubusercontent.com/kalatix/blood-summoner/master/Assets/'
 
 const bgmWhiteCrag = new Howl({
-  src: ['https://drive.google.com/uc?export=download&id=1_wIJB8-OVMIULtlMcMJm4-Un1oTg3-dR'],
+  src: [ gitHub + 'White-Crag-Theme-v1-compressed.m4a' ],
   loop: true,
   volume: 1,
   autoplay: false,
-  //loopPos: 0 //# of milliseconds into the file when the loop should shard
+  loopPos: 95000 //# of milliseconds into the file when the loop should start
+  onload: function() {
+    bgmWhiteCrag.seek(bgmWhiteCrag.loopPos).play();
+  }
 });
 
 function playMusic() {
@@ -3469,11 +3473,12 @@ function init(reason, loadGame) {
     checkCollectQuests();
   } else if (reason == 'died') {
     console.log()
+  //otherwise, it's a new game!
   } else {
     //set map to default
     mapCoord = [-22,-41];
     worldMap = false;
-    playerReset(1, 1);
+    playerReset(.2, 0);
   }
   lockAction('new');
   lockAction('load');

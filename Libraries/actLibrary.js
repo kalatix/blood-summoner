@@ -1012,7 +1012,11 @@ let actLibrary = [
     input: ['read', 'r'],
     class: ['look'],
     func: function(thisRoomIndex, dirObj, indirObj) {
-      act("l", dirObj, indirObj);
+      if (dirObj) {
+        act("l", dirObj, indirObj);
+      } else {
+        log("Read what?");
+      }
     }
   },
   {

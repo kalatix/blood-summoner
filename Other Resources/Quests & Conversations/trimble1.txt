@@ -1,0 +1,30 @@
+Eh, who are yeh?
+> tutorial: press enter to advance dialog
+
+How yeh get ta here? Not a fisherman by th'looks a yeh. Waves too rough round these parts anyhow. An' with the monsters vicious as they are wont ta these days, it's a wonder nobody travels at all. If yeh aren't no fisherman, are yeh lost?
+> tutorial people and places will often have unique commands
+
+> show letter
+
+Ah, Marcus. I know 'im. Big man, that one. Crush yeh like a poefruit, he will. Yeh'll find 'im a' the Bastion like always. Poor soul hardly leaves his courtyard anymore. Full a sadness, he.
+
+Why yeh lookin fer 'im, anyhow? Yeh from the college?
+
+> college?
+> ask name?
+> leave?
+
+COLLEGE
+Never heard a the college? Yeh must be from right far off. Thar's a place ta study what's left a the world far east a here. Not sure I could say exactly where, but I know they study the only book that matters anymore. The Dark Codex.
+
+ASK NAME
+Name's Father Trimble, meself. Ain't much of a father now though. 'Erebody near up an' died in my parts. All my church is gone, save me. Loved 'em ta the last of the light. No, I'm travelin meself – lookin fer somethin that I ain't sure even exists.
+
+Anyway, I've no manners, me! What's it they call yeh by?
+
+> [name]
+
+[name], eh! Well a right pleasure ta meet yeh, it is. Hope yeh find the big man Marcus.
+
+LEAVE
+Stay safe and sane, young traveler! Hope yeh find wha' yer lookin fer.
