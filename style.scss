@@ -1,0 +1,829 @@
+$bg: #181818;
+$bg-input: #4e4e4e;
+$text-default: #ccc;
+$red: #db4545;
+$orange: #e69a4d;
+$yellow: #d9d237;
+$green: #65cf65;
+$purple: #9087ed;
+$blue: #0dbede;
+$teal: adjust-hue($blue, -35deg);
+$offwhite: #f0f0f0;
+$map-theme: 'light';
+$bg-map: lighten($offwhite, 0%);
+$map-player: $bg;
+$map-default: #777;
+$map-poi: darken($map-default, 22%);
+$border-radius: 4px;
+
+@if $map-theme == 'dark' {
+	$bg-map: $bg-input;
+	$map-player: $offwhite;
+	$map-default: $text-default;
+	$map-poi: lighten($map-default, 20%);
+}
+@import url("https://fonts.googleapis.com/css?family=Sanchez");
+@import url('https://fonts.googleapis.com/css?family=PT+Mono');
+
+body,
+html {
+	background-color: $bg;
+}
+
+* {
+	/*font-family: "Sanchez", Times;*/
+	font-family: 'PT Mono', monospace;
+	letter-spacing: -.005em;
+	box-sizing: border-box;
+}
+
+.rarr,
+.larr {
+	&::before,
+	&::after {
+		content: '←';
+		display: inline-block;
+	}
+}
+
+.rarr::before,
+.rarr::after {
+	transform: rotate(180deg);
+}
+
+.log p {
+	margin: 0.5em 0 0 0.25em;
+	line-height: 1.25;
+	&, &.default, .default {
+		color: $text-default;
+	}
+
+	&.battle,
+	&.exits,
+	&.loot,
+	&.mobs,
+	&.stats,
+	&.ul,
+	&.ingreds,
+	&.no-top {
+		margin-top: 0;
+	}
+
+	&.ul, &.indent, &.ingreds {
+		margin-left: 2em;
+	}
+
+	&.ul {
+		list-style-type: disc;
+		display: list-item;
+	}
+
+	&.debug {
+		color: darken($text-default, 33%);
+	}
+
+	&.raw-input,
+	&.unique::before,
+	&.dark,
+	.dark {
+		color: darken($text-default, 20%);
+	}
+
+	&.dialog,
+	&.raw-input,
+	&.unique,
+	&.top,
+	.top {
+		margin-top: 0.5em;
+		display: block;
+	}
+
+	&.bottom,
+	.bottom,
+	&.debug {
+		margin-bottom: 0.5em;
+		display: block;
+	}
+
+	&.player {
+		color: white;
+	}
+
+	&.mob-name,
+	&.player-weapon {
+	  text-align: center;
+	  margin: .25em 0 0;
+	}
+}
+
+p.dialog::after,
+p.dialog::before {
+	display: inline;
+	content: '"';
+}
+
+p.unique {
+	&::before {
+		display: inline-block;
+		content: '>';
+		margin-right: 0.5em;
+	}
+}
+/* using a custom element here for brevity */
+.exit,
+.pickup,
+.white,
+p.white,
+w,
+sub {
+	color: $offwhite;
+}
+
+sub {
+  margin-left: 0.25em;
+}
+
+.info,
+p.info {
+	color: darken($text-default, 12%);
+}
+
+y,
+.dmg,
+dmg,
+.yellow,
+p.yellow,
+p.alc-chain,
+.alc-chain {
+	color: $yellow;
+}
+
+bl,
+.blue,
+.dialog,
+p.dialog {
+	color: $blue;
+}
+
+.dialog.alt,
+p.dialog.alt {
+  color: $teal;
+	/* this color is #0dde84 */
+}
+
+r,
+.red,
+p.red,
+boss {
+	color: $red;
+}
+
+/* using a custom element for brevity */
+.orange,
+o,
+p.orange,
+p.skill,
+p.alc-hold,
+.alc-hold {
+	color: $orange;
+}
+
+cr,
+.craft,
+p.craft,
+.green,
+.mono,
+g,
+p.green {
+	color: $green;
+}
+
+.plasmoid,
+.purple,
+p.purple,
+p.buff,
+pu {
+	color: $purple;
+}
+
+.input-wrapper {
+	display: block;
+	position: relative;
+
+	&.battling .input.log {
+    border-color: $red;
+	}
+}
+
+.map-wrapper {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	transform: translateX(-50%);
+	overflow: hidden;
+
+	&.active {
+		height: calc(100vh - 2em);
+	}
+}
+
+.input-wrapper,
+.map-wrapper {
+  position: relative;
+  top: calc(50vh - 0.5em);
+  transform: translateY(-50%);
+}
+
+.input-wrapper,
+.map-wrapper,
+.battle-wrapper {
+	width: 90%;
+	max-width: 620px;
+	margin: auto;
+	z-index: 1;
+	opacity: 0;
+	transition: .35s;
+
+	&.active {
+		opacity: 1;
+		z-index: 10;
+		display: block;
+	}
+
+	&.transition {
+		transition: 1s;
+	}
+
+	&.blackout,
+	&.long-transition {
+		transition: 2.5s;
+	}
+
+	&.blackout {
+		opacity: 0;
+		pointer-events: none;
+		cursor: default;
+	}
+}
+
+.bars {
+  position: absolute;
+  bottom: 0.1em;
+  line-height: 2;
+  font-size: 1.6em;
+  letter-spacing: -0.27em;
+  opacity: 0.6;
+  writing-mode: vertical-rl;
+  pointer-events: none;
+
+	&.hp {
+		color: $red;
+  	right: 100%;
+	}
+
+	&.plasmoid {
+		color: $purple;
+  	left: 100%;
+	}
+
+	&.hp::before,
+	&.plasmoid::before {
+	  content: '|';
+	  position: absolute;
+	  display: block;
+		bottom: 0;
+	  width: 100%;
+	  height: calc(5em - 1px);
+	  opacity: 0.35;
+	}
+}
+
+/* map stuff */
+.map {
+	position: absolute;
+	color: #777;
+	width: 100em;
+	top: 50%;
+	left: 50%;
+	transition: 0.15s;
+	cursor: default;
+	z-index: 50;
+
+	* {
+		letter-spacing: 0.4em;
+		line-height: 1;
+	}
+}
+
+.map-water {
+	background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' height='1em' width='1em'><text x='0' y='15' fill='#aaa' font-size='16'>,</text></svg>");
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	position: absolute;
+	z-index: 40;
+	transform: translate(0.2em, -0.5em);
+	display: none;
+}
+
+.map-player {
+	position: absolute;
+	color: black;
+	left: calc(50% - 0.2em);
+	top: calc(50% - .1em);
+	padding: 0 0.2em 0.1em;
+	z-index: 99;
+
+	&::before {
+		content: '@';
+		z-index: 100;
+		color: $map-player;
+	}
+}
+
+.map-player,
+.map-wrapper,
+.poi-hider {
+	background-color: $bg-map;
+}
+
+.map-player,
+.poi-hider {
+	line-height: 1;
+	border-radius: $border-radius;
+	box-shadow: 0 0 6px 0 $bg-map;
+}
+
+.map-POIs.show-POIs {
+	opacity: 0;
+}
+
+.poi-hider {
+	width: 1em;
+	height: 1em;
+	position: absolute;
+	opacity: 1;
+	transition: opacity 1s;
+
+	&.hidden {
+		opacity: 0;
+
+		&::before {
+			width: 6em;
+			height: 6em;
+			opacity: 0;
+			left: 0.5em;
+			top: 0.5em;
+		}
+
+		&::after {
+			opacity: 0;
+		}
+	}
+
+	&::before {
+		border-radius: 100%;
+		width: 0;
+		height: 0;
+		background-color: $orange;
+		opacity: 1;
+		transform: translate(-50%, -50%);
+		transition: opacity 1s, height 1s, width, 1s;
+		content: '';
+		display: block;
+		position: relative;
+		z-index: 75;
+	}
+
+	&::after {
+		content: '•';
+		z-index: 70;
+	}
+}
+
+poi {
+	color: $map-poi;
+}
+
+.map-tutorial {
+	position: absolute;
+	border-radius: 4px 4px 0 0;
+	background-color: $bg-input;
+	padding: 0.75em 1.25em;
+	bottom: 0;
+	transition: 0.7s;
+	z-index: 80;
+	opacity: 0;
+	left: 5%;
+	width: 90%;
+	pointer-events: none;
+}
+
+.map-tutorial.active {
+	opacity: 1;
+}
+
+.map-tutorial p {
+	margin: 0;
+}
+
+@media (max-width: 767px) {
+	.map-buttons {
+	  position: absolute;
+	  width: 0;
+	  height: 0;
+	  bottom: 8.5em;
+	  right: 6em;
+
+		.arrow {
+			clip-path: url(#dPad);
+		  width: 35px;
+		  height: 40px;
+		  background-color: #afafaf;
+			position: absolute;
+			left: 0;
+			bottom: 0;
+	  	z-index: 100;
+
+			&.right {
+			  transform: translate(28px, 28px) rotate(90deg);
+			}
+
+			&.down {
+				transform: translateY(56px) rotate(180deg);
+			}
+
+			&.left {
+				transform: translate(-28px, 28px) rotate(-90deg);
+			}
+		}
+
+		.enter-button {
+		  position: absolute;
+	  	bottom: -26px;
+		  left: -1px;
+		  width: 36px;
+		  height: 36px;
+		  border: 4px solid $offwhite;
+		  border-radius: 50%;
+		  background-color: #afafaf;
+		  z-index: 101;
+		}
+	}
+}
+
+/* end map stuff */
+.log {
+	height: calc(100vh - 5em);
+	max-height: 700px;
+	display: grid;
+  grid-template-rows: 1fr auto;
+
+	.log-inner {
+		overflow-y: scroll;
+		flex-basis: 100%;
+	}
+}
+
+.input,
+.battle-wrapper {
+	width: 100%;
+	border: none;
+	color: #f5f5f5;
+	font-size: 16px;
+	padding: 0.75em;
+	transition: box-shadow 0.2s;
+}
+
+.input {
+	background-color: $bg-input;
+	position: relative;
+
+	&.log {
+	  border: 0.25em solid rgba($red, 0);
+		transition: .15s;
+	}
+}
+
+.input,
+.map-wrapper,
+.battle-wrapper,
+.player-wrapper,
+.mob-wrapper {
+	border-radius: $border-radius;
+}
+
+.console {
+	margin-top: 0.5em;
+	min-height: 1.25em;
+
+	&:focus {
+		outline: none !important;
+		box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.6);
+	}
+}
+
+/* battle screen */
+
+.battle-wrapper {
+	//background-color: $bg-input;
+	position: relative;
+  padding: 0 1em;
+	min-height: 0em;
+  text-align: right;
+  /*display: flex;
+  align-items: flex-end;
+  justify-content: space-between;*/
+  transition: 0.42s;
+	left: 0;
+	opacity: 0;
+	z-index: 15;
+
+	&.active {
+		min-height: 5.5em;
+
+		.player-wrapper,
+		.mob-wrapper {
+		  height: 3.5em;
+		  margin-top: 1em;
+		  margin-bottom: 1em;
+		  padding: .25em;
+		  vertical-align: bottom;
+	  	opacity: 1;
+		}
+	}
+
+	.player-wrapper,
+	.mobs {
+	  width: 33%;
+  	display: inline-block;
+	}
+
+	.player-wrapper,
+	.mob-wrapper {
+	  background-color: lighten($bg-input, 15%);
+	  height: 0em;
+		position: relative;
+	  opacity: 0;
+
+		.wait-bar {
+			border-radius: 0 0 $border-radius $border-radius;
+		}
+
+		.wait-bar,
+		.hit-bar,
+		.gethit-bar,
+		.guard-bar {
+			display: block;
+			position: absolute;
+		}
+
+		.gethit-bar,
+		.guard-bar {
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			border-radius: $border-radius;
+			opacity: 0;
+		}
+
+		.wait-bar,
+		.hit-bar,
+		.gethit-bar, {
+			transition: opacity .15s cubic-bezier(0.19, 1, 0.22, 1);
+
+			&.active {
+			  animation: hit 0.25s;
+			  animation-direction: alternate;
+			  animation-iteration-count: 2;
+			}
+		}
+
+		.gethit-bar {
+			box-shadow: inset 0 0 0 0.25em $red;
+		}
+
+		.guard-bar {
+			box-shadow: inset 0 0 0 0.25em $yellow;
+			transition: all .35s cubic-bezier(0.19, 1, 0.22, 1), opacity .1s .1s;
+
+			&.active {
+				opacity: 1;
+			}
+
+			&.hiding {
+				left: -.5em;
+				right: -.5em;
+				top: -.5em;
+				bottom: -.5em;
+				opacity: 0;
+			}
+		}
+
+		.wait-bar {
+			width: 0%;
+			bottom: 0;
+			height: .25em;
+			background-color: $teal;
+	  	z-index: 10;
+
+			&.transition {
+				transition: 200ms linear;
+			}
+		}
+
+		.hit-bar {
+			top: 0;
+			bottom: 0;
+			width: .25em;
+			opacity: 0;
+			background-color: $red;
+			border-radius: 0 $border-radius $border-radius 0;
+		}
+
+		.dmg-splash {
+			display: block;
+			position: absolute;
+		  width: 100%;
+		  text-align: center;
+		  padding: 0.2em .5em;
+		  color: $yellow;
+		  opacity: 1;
+			top: 1.1em;
+		  font-size: 1.25em;
+		  transition: all .5s ease, opacity 0s;
+		  //transition: top .75s linear 0s, opacity .65s .5s;
+
+			&.fade {
+			  transition: all .5s linear .35s, opacity .75s ease .5s;
+				opacity: 0;
+				top: -3em;
+			}
+		}
+
+		&.miss-splash {
+		  //background-color: #999;
+			transition: .15s cubic-bezier(0.19, 1, 0.22, 1);
+		  animation: miss 0.15s;
+		  animation-direction: alternate;
+		  animation-iteration-count: 2;
+		}
+
+		&.dead {
+			background-color: $red;
+			color: $offwhite;
+
+			.wait-bar,
+			.hit-bar,
+			.gethit-bar {
+				display: none;
+			}
+		}
+	}
+
+	.player-wrapper {
+	  display: inline-block;
+	  position: absolute;
+	  left: 0;
+	  bottom: 0;
+	  margin-right: auto;
+
+		.wait-bar {
+			left: 0;
+			right: auto;
+		}
+
+		.hit-bar {
+			right: 0;
+			left: auto;
+		}
+	}
+
+	.mob-wrapper {
+		&.current-target::before {
+	  	display: inline-block;
+		  /*content: "\027A4";*/
+			content: '>';
+		  position: absolute;
+		  right: calc(100% + .5em);
+		  top: 50%;
+		  bottom: 50%;
+		  line-height: 0;
+			color: darken($text-default, 20%);
+		  transform: scaleY(1.5);
+		}
+
+		.wait-bar {
+			left: auto;
+			right: 0;
+		}
+
+		.hit-bar {
+			left: 0;
+		}
+	}
+}
+
+@keyframes miss {
+  from {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+  to {
+		transform: scale(.92);
+		opacity: .82;
+	}
+}
+
+@keyframes hit {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}
+
+/* end battle screen */
+
+.console-form {
+	width: 100%;
+}
+
+.command-title {
+	display: block;
+}
+
+.command-list {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.command {
+	margin: 0 0.75em;
+}
+
+.hidden {
+	opacity: 0;
+}
+
+.title-wrapper {
+  position: absolute;
+  top: 70px;
+  left: 50vw;
+	z-index: 20;
+  transform: translateX(-50%);
+  line-height: 0.85;
+  color: $text-default;
+	transition: opacity 1.25s;
+  width: 27em;
+
+	&.hidden {
+  	opacity: 0;
+		z-index: 0;
+	}
+
+	.title-inner {
+		letter-spacing: -1.8px;
+  	font-size: 9px;
+  	background: linear-gradient(176deg, #db4545, #5c1212 81%);
+	  -webkit-background-clip: text;
+	  -webkit-text-fill-color: transparent;
+	  color: $red;
+	}
+
+	.title-sub,
+	.title-sub span {
+		transition: .15s;
+		cursor: default;
+	}
+
+	.title-sub {
+		text-align: left;
+	  line-height: 2.25;
+	  margin-top: 5em;
+		transition: .15s;
+		color: $bg;
+
+		.sub-line {
+		  display: inline-block;
+		  min-width: 51%;
+
+			&:hover {
+				color: darken($text-default, 20%);
+
+				.sub-entry {
+					color: white;
+				}
+			}
+		}
+
+		.sub-entry {
+			color: $text-default;
+		}
+	}
+}
