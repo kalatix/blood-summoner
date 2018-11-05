@@ -25,6 +25,32 @@ const bgmWhiteCrag = new Howl({
   }
 });
 
+const bgmWorld = new Howl({
+  src: [ gitHub + 'World-Theme-v1.mp3' ],
+  loop: 0,
+  onload: function() {
+    bgmPush(this);
+    //this.seek(345);
+  },
+  onend: function() {
+    bgmLoop(this);
+  }
+});
+
+/*
+const bgm = new Howl({
+  src: [ gitHub + '.mp3' ],
+  loop: 0,
+  onload: function() {
+    bgmPush(this);
+    //this.seek(345);
+  },
+  onend: function() {
+    bgmLoop(this);
+  }
+});
+*/
+
 let bastions = [
   {
     entry: 'bastion1',

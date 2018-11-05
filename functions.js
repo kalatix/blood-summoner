@@ -2,12 +2,12 @@
 let playTimer;
 let battleSpeed = 200; //milliseconds per round, default: 200
 let endBattleDelay = 3000; // milliseconds that battle stats hang around after battle ends, default: 3000
-let playerWait = 0;
-let startedBy = false;
-let saveGameNum = false;
-let focusAction = false;
+let playerWait = 0; //delay in milliseconds of the player's action
+let startedBy = false; //who initiated combat
+let saveGameNum = false; //
+let focusAction = false; //if the game is locking you to only pick one or two options
 
-let turn;
+let turn; // turn number in battle
 let battling = false;
 let battleTimer;
 let aggroTimer;
@@ -823,6 +823,7 @@ function enterPOI(destination) {
       log("You enter " + poi.title, 'yellow');
       look();
       switchMap('room');
+      bgmStop();
       if (poi.bgm) {
         //logProps(poi.bgm);
         bgmPlay(poi.bgm);
@@ -3346,11 +3347,13 @@ function bgmPush(howl) {
 function bgmStop() {
   $.each(bgmLibrary, function() {
     var $this = this;
-    $this.fade(1, 0, 1500);
-    setTimeout(function() {
-      $this.stop();
-      $this.volume(1);
-    }, 1750);
+    if ( this.playing() ) {
+      $this.fade(1, 0, 1000);
+      setTimeout(function() {
+        $this.stop();
+        $this.volume(1);
+      }, 1100);
+    }
   });
 }
 

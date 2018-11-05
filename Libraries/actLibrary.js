@@ -872,6 +872,7 @@ let actLibrary = [
         log("Leaving the area...", "yellow");
         switchMap('map');
         bgmStop();
+        bgmPlay(bgmWorld);
         //show the tutorial for a bit
         if (mapTutorial) {
           $('.map-tutorial').addClass('active');
